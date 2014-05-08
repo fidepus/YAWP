@@ -14,4 +14,4 @@ This code is licensed under the MIT license, see the `LICENSE file
 <https://github.com/dbrgn/RPLCD/blob/master/LICENSE>`_ or `tldrlegal
 <http://www.tldrlegal.com/license/mit-license>`_ for more information. 
 
-.. _RPLCD: https://github.com/dbrgn/RPLCD
+RPLCD: https://github.com/dbrgn/RPLCD
