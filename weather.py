@@ -16,6 +16,8 @@ import urllib
 
 import RPi.GPIO as GPIO
 
+import time
+
 try:
     input = raw_input
 except NameError:
@@ -79,6 +81,8 @@ GPIO.setwarnings(False)
 
 lcd = CharLCD()
 
+
+# Print the data onto the display.
 lcd.clear()
 lcd.write_string(str(City) + ': ' + str(Temperature) + ' C')
 lcd.cursor_pos = (1, 0)
@@ -87,3 +91,8 @@ lcd.cursor_pos = (2, 0)
 lcd.write_string('Max: ' + str(Weather[0][3]) + ' C')
 lcd.cursor_pos = (3, 0)
 lcd.write_string(Weathertext)
+
+# Write the data to a webpage on the local server
+index = open('/var/www/index.html','w')
+index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weather[0][2]) + ' C <br> Max: ' + str(Weather[0][3]) + ' C <br>' + Weathertext + '<br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.close()
