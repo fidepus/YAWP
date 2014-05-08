@@ -7,6 +7,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 
 import sys
 
+# Import LCD stuff from RPLCD
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
@@ -28,16 +29,19 @@ try:
 except NameError:
     unichr = chr
 
+# Yahoo location code. Get the right one for your location from Yahoo's weather page.
+LocationID = '700029'
+
+
 # Weather array
-# 1. Dimension = heute, 2. Dimension = naechster Tag
-# 1. Element = Tag, 2. Element = Datum, 3. = Niedrigste Temperatur, 4. Element = Hoechste Temperatur, 5. Element = Wettersituation
-Weather = [["", "", "", "", ""] , ["", "", "", "", ""]]
+# Dimensions: 1 = today, 2 = tomorrow
+# Elements: 1 = day, 2 = date, 3 = low temp, 4 = high temp, 5 = weather text
+Weatherarray = [["", "", "", "", ""] , ["", "", "", "", ""]]
 
 # Fetch weather XML for Trier, Germany
-Trier = urllib.urlopen('http://weather.yahooapis.com/forecastrss?w=700029&u=c').read()
+Trier = urllib.urlopen('http://weather.yahooapis.com/forecastrss?w=' + LocationID + '&u=c').read()
 
 # Parse the XML
-
 Trier = parseString(Trier)
 
 # Get town
@@ -54,11 +58,7 @@ Geo_Long = Trier.getElementsByTagName('geo:long')[0].firstChild.data
 
 # Get today's weather
 Today = Trier.getElementsByTagName('yweather:condition')[0]
-
-# Get weather text
 Weathertext = Today.attributes["text"].value
-
-# Get temperature
 Temperature = float(Today.attributes["temp"].value)
 
 # Put it all in a list
@@ -69,11 +69,11 @@ for Counter in range(2):
     Future = Trier.getElementsByTagName('yweather:forecast')[Counter]
 
     # Process data
-    Weather[Counter][0] = Future.attributes["day"].value
-    Weather[Counter][1] = Future.attributes["date"].value
-    Weather[Counter][2] = float(Future.attributes["low"].value)
-    Weather[Counter][3] = float(Future.attributes["high"].value)
-    Weather[Counter][4] = Future.attributes["text"].value
+    Weatherarray[Counter][0] = Future.attributes["day"].value
+    Weatherarray[Counter][1] = Future.attributes["date"].value
+    Weatherarray[Counter][2] = float(Future.attributes["low"].value)
+    Weatherarray[Counter][3] = float(Future.attributes["high"].value)
+    Weatherarray[Counter][4] = Future.attributes["text"].value
 
 
 # Disable useless warings
@@ -86,13 +86,13 @@ lcd = CharLCD()
 lcd.clear()
 lcd.write_string(str(City) + ': ' + str(Temperature) + ' C')
 lcd.cursor_pos = (1, 0)
-lcd.write_string('Min: ' + str(Weather[0][2]) + ' C')
+lcd.write_string('Min: ' + str(Weatherarray[0][2]) + ' C')
 lcd.cursor_pos = (2, 0)
-lcd.write_string('Max: ' + str(Weather[0][3]) + ' C')
+lcd.write_string('Max: ' + str(Weatherarray[0][3]) + ' C')
 lcd.cursor_pos = (3, 0)
 lcd.write_string(Weathertext)
 
 # Write the data to a webpage on the local server
 index = open('/var/www/index.html','w')
-index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weather[0][2]) + ' C <br> Max: ' + str(Weather[0][3]) + ' C <br>' + Weathertext + '<br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
