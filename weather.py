@@ -29,6 +29,8 @@ try:
 except NameError:
     unichr = chr
 
+
+# Start Yahoo weather stuff
 # Yahoo location code. Get the right one for your location from Yahoo's weather page.
 LocationID = '700029'
 
@@ -74,6 +76,7 @@ for Counter in range(2):
     Weatherarray[Counter][2] = float(Future.attributes["low"].value)
     Weatherarray[Counter][3] = float(Future.attributes["high"].value)
     Weatherarray[Counter][4] = Future.attributes["text"].value
+# End Yahoo weather stuff.
 
 
 # Disable useless warings
