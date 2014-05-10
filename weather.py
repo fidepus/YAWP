@@ -142,7 +142,7 @@ lcd.cursor_pos = (3, 0)
 lcd.write_string(Weathertext)
 
 # Write the data to a webpage on the local server
-index = open('/var/www/index.html','w')
+index = open('/var/www/aktuell.html','w')
 index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
 
@@ -150,13 +150,10 @@ index.close()
  # Write data to a .csv file for graph creation
 weather_csv = open('/home/pi/YAWP/weather.csv', 'a')
 datawriter = csv.writer(weather_csv)
-datawriter.writerow([str(time.strftime('%Y-%m-%d,%H:%M')),str(temperaturein),str(temperatureout)])
+datawriter.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(temperaturein),str(temperatureout)])
 weather_csv.close()
 
-# Read it again and create arrays from it
-# If the script runs every 5 minutes, I need the last 288 rows to plot 24 hours.
-
-
+# From here, a gnuplot file will take over.
 
 
 
