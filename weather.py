@@ -4,7 +4,7 @@
 # This project uses https://github.com/dbrgn/RPLCD.
 # sudo apt-get install python-matplotlib
 
-from __future__ import print_function, division, absolute_import, unicode_literals, with_statement
+from __future__ import print_function, division, absolute_import, unicode_literals, 
 
 import sys
 
@@ -20,14 +20,9 @@ import time
 import csv
 
 # Imports for graph plotting
-# matplotlib plotting module
+import numpy as np
 import matplotlib.pyplot as plt
-# matplotlib colormap module
-import matplotlib.cm as cm
-# needed for formatting Y axis
-from matplotlib.ticker import FuncFormatter
-# Matplotlib font manager
-import matplotlib.font_manager as font_manager
+import matplotlib.dates as mdates
 
 
 # some LCD magic happens here
@@ -155,7 +150,7 @@ index.close()
 # Write data to a .csv file for graph creation
 weather_csv = open('/home/pi/YAWP/weather.csv', 'a')
 datawriter = csv.writer(weather_csv)
-datawriter.writerow([time.strftime('%Y-%m-%d,%H:%M'),float(temperaturein),float(temperatureout)])
+datawriter.writerow([time.strftime('%Y-%m-%d,%H:%M'),str(temperaturein),str(temperatureout)])
 weather_csv.close()
 
 # Read it again and create arrays from it
