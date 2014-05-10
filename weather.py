@@ -4,7 +4,7 @@
 # This project uses https://github.com/dbrgn/RPLCD.
 # sudo apt-get install python-matplotlib
 
-from __future__ import print_function, division, absolute_import, unicode_literals, 
+from __future__ import print_function, division, absolute_import, unicode_literals
 
 import sys
 
@@ -147,10 +147,10 @@ index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weathera
 index.close()
 
 
-# Write data to a .csv file for graph creation
+ # Write data to a .csv file for graph creation
 weather_csv = open('/home/pi/YAWP/weather.csv', 'a')
 datawriter = csv.writer(weather_csv)
-datawriter.writerow([time.strftime('%Y-%m-%d,%H:%M'),str(temperaturein),str(temperatureout)])
+datawriter.writerow([str(time.strftime('%Y-%m-%d,%H:%M')),str(temperaturein),str(temperatureout)])
 weather_csv.close()
 
 # Read it again and create arrays from it
