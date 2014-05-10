@@ -11,7 +11,6 @@ ToDo
 ----
 
 - Add more sensors
-- Remove superfluous Yahoo data (as soon as one of the sensors has a wire and is placed outside)
 
 License
 -------
