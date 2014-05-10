@@ -138,5 +138,5 @@ lcd.write_string(Weathertext)
 
 # Write the data to a webpage on the local server
 index = open('/var/www/index.html','w')
-index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
