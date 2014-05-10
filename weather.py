@@ -2,23 +2,30 @@
 # -*- coding: utf-8 -*-
 # Write some message on the display.
 # This project uses https://github.com/dbrgn/RPLCD.
+# sudo apt-get install python-matplotlib
 
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import sys
 
-# Import LCD stuff from RPLCD
+# Import LCD stuff from RPLCD, et. al.
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
 
 from xml.dom.minidom import *
 import urllib
-
 import RPi.GPIO as GPIO
-
 import time
+import csv
 
+# Imports for graph plotting
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
+
+# some LCD magic happens here
 try:
     input = raw_input
 except NameError:
@@ -138,3 +145,22 @@ lcd.write_string(Weathertext)
 index = open('/var/www/index.html','w')
 index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
+
+
+# Write data to a .csv file for graph creation
+weather_csv = open('weather.csv', 'a')
+datawriter = csv.writer(weather_csv)
+datawriter.writerow([time.strftime("%d.%m.%Y %H:%M"),str(temperaturein),str(temperatureout)])
+weather_csv.close()
+
+# Read it again and create arrays from it
+#weather
+
+
+
+
+
+
+
+
+
