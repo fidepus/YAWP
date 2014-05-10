@@ -29,12 +29,24 @@ try:
 except NameError:
     unichr = chr
 
-
-# Start Yahoo weather stuff
+# ###################################################################################
+# Configure stuff here:
+# Temp sensor ID is the folder name for ds18b20 1-wire sensors
+# found in /sys/bus/w1/devices/
+# Drivers are loaded with
+# sudo modprobe w1-gpio
+# sudo modprobe w1-therm
+# or put them in /etc/modules
+TempSensorInside = '28-000005ad1070'
+TempSensorOutside = '28-000005ad0691'
 # Yahoo location code. Get the right one for your location from Yahoo's weather page.
 LocationID = '700029'
+# ###################################################################################
 
+# Disable useless GPIO warnings
+GPIO.setwarnings(False)
 
+# Start Yahoo weather stuff
 # Weather array
 # Dimensions: 1 = today, 2 = tomorrow
 # Elements: 1 = day, 2 = date, 3 = low temp, 4 = high temp, 5 = weather text
@@ -78,24 +90,53 @@ for Counter in range(2):
     Weatherarray[Counter][4] = Future.attributes["text"].value
 # End Yahoo weather stuff.
 
+# Start sensor stuff
+# The inside sensor
+# Open, read, close the sensor files
+tempfilein = open("/sys/bus/w1/devices/" + TempSensorInside + "/w1_slave") 
 
-# Disable useless warings
-GPIO.setwarnings(False)
+textin = tempfilein.read()
+
+tempfilein.close() 
+
+# Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
+secondlinein = textin.split("\n")[1] 
+temperaturedatain = secondlinein.split(" ")[9] 
+temperaturein = float(temperaturedatain[2:]) 
+temperaturein = temperaturein / 1000 
+# print temperaturein
+
+# The outside sensor
+tempfileout = open("/sys/bus/w1/devices/" + TempSensorOutside + "/w1_slave") 
+
+textout = tempfileout.read() 
+
+tempfileout.close() 
+
+# Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
+secondlineout = textout.split("\n")[1] 
+temperaturedataout = secondlineout.split(" ")[9] 
+temperatureout = float(temperaturedataout[2:]) 
+temperatureout = temperatureout / 1000 
+# print temperatureout
 
 lcd = CharLCD()
 
 
 # Print the data onto the display.
 lcd.clear()
-lcd.write_string(str(City) + ': ' + str(Temperature) + ' C')
+lcd.write_string(time.strftime("%d.%m.%Y %H:%M"))
 lcd.cursor_pos = (1, 0)
-lcd.write_string('Min: ' + str(Weatherarray[0][2]) + ' C')
+#lcd.write_string(str(City) + ' ')
+lcd.write_string(str(Temperature))
+lcd.write_string('Min:' + str(Weatherarray[0][2]))
+lcd.write_string('Max:' + str(Weatherarray[0][3]))
 lcd.cursor_pos = (2, 0)
-lcd.write_string('Max: ' + str(Weatherarray[0][3]) + ' C')
+lcd.write_string('Innen ' + str(temperatureout) + ' ' + str(temperaturein))
 lcd.cursor_pos = (3, 0)
 lcd.write_string(Weathertext)
 
 # Write the data to a webpage on the local server
 index = open('/var/www/index.html','w')
-index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
