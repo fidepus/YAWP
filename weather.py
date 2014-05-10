@@ -155,9 +155,3 @@ weather_csv.close()
 
 # Read it again and create arrays from it
 # If the script runs every 5 minutes, I need the last 288 rows to plot 24 hours.
-
-
-
-
-
-
