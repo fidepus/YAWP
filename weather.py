@@ -148,16 +148,13 @@ index.close()
 
 
 # Write data to a .csv file for graph creation
-weather_csv = open('weather.csv', 'a')
+weather_csv = open('/home/pi/YAWP/weather.csv', 'a')
 datawriter = csv.writer(weather_csv)
-datawriter.writerow([time.strftime("%d.%m.%Y %H:%M"),str(temperaturein),str(temperatureout)])
+datawriter.writerow([time.strftime('%Y-%m-%d,%H:%M'),str(temperaturein),str(temperatureout)])
 weather_csv.close()
 
 # Read it again and create arrays from it
-#weather
-
-
-
+# If the script runs every 5 minutes, I need the last 288 rows to plot 24 hours.
 
 
 
