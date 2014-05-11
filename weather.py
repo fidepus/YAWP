@@ -81,6 +81,7 @@ Geo_Long = Trier.getElementsByTagName('geo:long')[0].firstChild.data
 Today = Trier.getElementsByTagName('yweather:condition')[0]
 Weathertext = Today.attributes["text"].value
 Temperature = float(Today.attributes["temp"].value)
+Conditioncode = Today.attributes["code"].value
 
 # Put it all in a list
 for Counter in range(2):
@@ -142,8 +143,9 @@ lcd.cursor_pos = (3, 0)
 lcd.write_string(Weathertext)
 
 # Write the data to a webpage on the local server
+# Get some weather icons that are compliant with Yahoo condition codes. The ones by MerlinTheRed are nice and work well <http://merlinthered.deviantart.com/art/plain-weather-icons-157162192> CC-BY-NC-SA
 index = open('/var/www/aktuell.html','w')
-index.write(Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.write(Weathertext + '<img src="' + Conditioncode + '.png" align="right" alt="Wettericon"><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
 
 
