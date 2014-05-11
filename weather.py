@@ -100,31 +100,31 @@ for Counter in range(2):
 # Start sensor stuff
 # The inside sensor
 # Open, read, close the sensor files
-tempfilein = open("/sys/bus/w1/devices/" + TempSensorInside + "/w1_slave") 
+tempfilein = open("/sys/bus/w1/devices/" + TempSensorInside + "/w1_slave")
 
 textin = tempfilein.read()
 
-tempfilein.close() 
+tempfilein.close()
 
 # Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
-secondlinein = textin.split("\n")[1] 
-temperaturedatain = secondlinein.split(" ")[9] 
-temperaturein = float(temperaturedatain[2:]) 
-temperaturein = temperaturein / 1000 
+secondlinein = textin.split("\n")[1]
+temperaturedatain = secondlinein.split(" ")[9]
+temperaturein = float(temperaturedatain[2:])
+temperaturein = temperaturein / 1000
 # print temperaturein
 
 # The outside sensor
-tempfileout = open("/sys/bus/w1/devices/" + TempSensorOutside + "/w1_slave") 
+tempfileout = open("/sys/bus/w1/devices/" + TempSensorOutside + "/w1_slave")
 
-textout = tempfileout.read() 
+textout = tempfileout.read()
 
-tempfileout.close() 
+tempfileout.close()
 
 # Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
-secondlineout = textout.split("\n")[1] 
-temperaturedataout = secondlineout.split(" ")[9] 
-temperatureout = float(temperaturedataout[2:]) 
-temperatureout = temperatureout / 1000 
+secondlineout = textout.split("\n")[1]
+temperaturedataout = secondlineout.split(" ")[9]
+temperatureout = float(temperaturedataout[2:])
+temperatureout = temperatureout / 1000
 # print temperatureout
 
 lcd = CharLCD()
@@ -143,7 +143,7 @@ lcd.write_string(Weathertext)
 
 # Write the data to a webpage on the local server
 index = open('/var/www/aktuell.html','w')
-index.write(str(City) + ': ' + str(Temperature) + ' C <br> Min: ' + str(Weatherarray[0][2]) + ' C <br> Max: ' + str(Weatherarray[0][3]) + ' C <br>' + Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.write(Weathertext + '<br><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
 index.close()
 
 
