@@ -145,7 +145,7 @@ lcd.write_string(Weathertext)
 # Write the data to a webpage on the local server
 # Get some weather icons that are compliant with Yahoo condition codes. The ones by MerlinTheRed are nice and work well <http://merlinthered.deviantart.com/art/plain-weather-icons-157162192> CC-BY-NC-SA
 index = open('/var/www/aktuell.html','w')
-index.write(Weathertext + '<img src="' + Conditioncode + '.png" align="right" alt="Wettericon"><br> Sensordaten: <br> Innen: ' + str(temperaturein) + '<br> Aussen: ' + str(temperatureout) + '<br><br> Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S"))
+index.write('<style type="text/css">body {font-weight:lighter; font-family:Arial; font-size:100%; }''</style>' + Weathertext + '<img src="' + Conditioncode + '.png" align="right" alt="Wettericon"><br> Sensordaten: <br> Innen: ' + str(temperaturein) + ' &deg;C<br> Aussen: ' + str(temperatureout) + ' &deg;C<br><br> <h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>')
 index.close()
 
 
