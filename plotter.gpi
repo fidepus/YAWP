@@ -9,7 +9,8 @@ set output "temps.png"
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
 set format x "%H:%M"
-set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
+# set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
+set xrange [ time(0) - 79300 : time(0) + 7200 ]    # 86400 sec = 1 day
 set xtics 7200 font "Ariel, 10"
 
 set xlabel "Zeit"
