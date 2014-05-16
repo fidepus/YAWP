@@ -1,0 +1,6 @@
+#!/bin/sh
+while true; do 
+	/usr/bin/python /home/pi/YAWP/weather.py
+	wait
+	sleep 300
+done
