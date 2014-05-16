@@ -156,7 +156,7 @@ index.close()
  # Write data to a .csv file for graph creation
 weather_csv = open('/home/pi/YAWP/weather.csv', 'a')
 datawriter = csv.writer(weather_csv)
-datawriter.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(temperaturein),str(temperatureout)])
+datawriter.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(temperaturein),str(temperatureout),str('0'),str('15')])
 weather_csv.close()
 
 # From here, a gnuplot file will take over.
