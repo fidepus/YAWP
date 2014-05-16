@@ -24,6 +24,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+import os
+import subprocess
+import shutil
+
 
 # some LCD magic happens here
 try:
@@ -156,6 +160,11 @@ datawriter.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(temperaturein),str
 weather_csv.close()
 
 # From here, a gnuplot file will take over.
+p = subprocess.Popen("gnuplot plotter.gpi", shell = True)
+os.waitpid(p.pid, 0)
+
+# Copy it over to the webserver
+shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
 
 
 
