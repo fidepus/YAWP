@@ -160,11 +160,16 @@ datawriter.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(temperaturein),str
 weather_csv.close()
 
 # From here, a gnuplot file will take over.
+# Print graph for one day
 p = subprocess.Popen("gnuplot plotter.gpi", shell = True)
+os.waitpid(p.pid, 0)
+# Print graph for one week
+p = subprocess.Popen("gnuplot weekplotter.gpi", shell = True)
 os.waitpid(p.pid, 0)
 
 # Copy it over to the webserver
 shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
+shutil.copy2('/home/pi/YAWP/weektemps.png', '/var/www/')
 
 
 

@@ -4,21 +4,21 @@ reset
 set datafile separator ","
 
 set terminal png size 640,360
-set output "temps.png"
+set output "weektemps.png"
 
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
-set format x "%H:%M"
+set format x "%d.%m."
 # set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
-set xrange [ time(0) - 79300 : time(0) + 7200 ]    # 86400 sec = 1 day
-set xtics 7200 font "Ariel, 10"
+set xrange [ time(0) - 612000 : time(0) + 7200 ]    # 604800 sec = 1 week
+set xtics 86400 font "Ariel, 10"
 
 set xlabel "Zeit"
 set ylabel "Temperatur"
 set yrange [-20:40]
 set ytics 5 font "Ariel, 10"
 
-set title "Temperatur innen/aussen 24h"
+set title "Temperatur innen/aussen Woche"
 set key below
 set grid
 
