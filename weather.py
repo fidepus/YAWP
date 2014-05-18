@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Write some message on the display.
 # This project uses https://github.com/dbrgn/RPLCD.
 # sudo apt-get install python-matplotlib
 
 from __future__ import print_function, division, absolute_import, unicode_literals
-
 import sys
 from xml.dom.minidom import *
 import urllib
@@ -19,9 +17,9 @@ import shutil
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
+import backlight
 
-
-
+backlight.switch_light()
 
 # some LCD magic happens here
 try:
