@@ -7,21 +7,20 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import sys
-
-# Import LCD stuff from RPLCD, et. al.
-from RPLCD import CharLCD
-from RPLCD import Alignment, CursorMode, ShiftMode
-from RPLCD import cursor, cleared
-
 from xml.dom.minidom import *
 import urllib
 import RPi.GPIO as GPIO
 import time
 import csv
-
 import os
 import subprocess
 import shutil
+# Import LCD stuff from RPLCD
+from RPLCD import CharLCD
+from RPLCD import Alignment, CursorMode, ShiftMode
+from RPLCD import cursor, cleared
+
+
 
 
 # some LCD magic happens here
@@ -59,7 +58,7 @@ GPIO.setwarnings(False)
 Weather_Array = [["", "", "", "", ""] , ["", "", "", "", ""]]
 
 # Fetch weather XML for Trier, Germany
-Trier = urllib.urlopen('http://weather.yahooapis.com/forecastrss?w=' + Location_ID + '&u=c').read()
+Trier = urllib.urlopen('http://weather.yahooapis.com/forecastrss?w={0}&u=c'.format(Location_ID)).read()
 
 # Parse the XML
 Trier = parseString(Trier)
@@ -100,10 +99,11 @@ for Counter in range(2):
 # Start sensor stuff
 # The inside sensor
 # Open, read, close the sensor files
-with open("/sys/bus/w1/devices/" + Temp_Sensor_Inside + "/w1_slave", 'r') as Temp_File_In:
+with open("/sys/bus/w1/devices/{0}/w1_slave".format(Temp_Sensor_Inside), 'r') as Temp_File_In:
     Text_In = Temp_File_In.read()
 
-# Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
+# Jump to the right position in the sensor file, convert the string to a number, 
+# put the decimal point in
 Second_Line_In = Text_In.split("\n")[1]
 Temperature_Data_In = Second_Line_In.split(" ")[9]
 Temperature_In = float(Temperature_Data_In[2:])
@@ -111,10 +111,11 @@ Temperature_In = Temperature_In / 1000
 # print Temperature_In
 
 # The outside sensor
-with open("/sys/bus/w1/devices/" + Temp_Sensor_Outside + "/w1_slave", 'r') as Temp_File_Out:
+with open("/sys/bus/w1/devices/{0}/w1_slave".format(Temp_Sensor_Outside), 'r') as Temp_File_Out:
     Text_Out = Temp_File_Out.read()
 
-# Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
+# Jump to the right position in the sensor file, convert the string to a number, 
+# put the decimal point in
 Second_Line_Out = Text_Out.split("\n")[1]
 Temperature_Data_Out = Second_Line_Out.split(" ")[9]
 Temperature_Out = float(Temperature_Data_Out[2:])
@@ -129,21 +130,32 @@ lcd.clear()
 lcd.write_string(time.strftime("%d.%m.%Y %H:%M"))
 lcd.cursor_pos = (1, 0)
 #lcd.write_string(str(City) + ' ')
-lcd.write_string('Innen:  '+ str(Temperature_In) + ' Grad')
+lcd.write_string('Innen: {0} Grad'.format(Temperature_In))
 lcd.cursor_pos = (2, 0)
-lcd.write_string('Aussen: '+ str(Temperature_Out) + ' Grad')
+lcd.write_string('Aussen: {0} Grad'.format(Temperature_Out))
 lcd.cursor_pos = (3, 0)
 lcd.write_string(Weather_Text)
 
 # Write the data to a webpage on the local server
-# Get some weather icons that are compliant with Yahoo condition codes. The ones by MerlinTheRed are nice and work well <http://merlinthered.deviantart.com/art/plain-weather-icons-157162192> CC-BY-NC-SA
+# Get some weather icons that are compliant with Yahoo condition codes. 
+# The ones by MerlinTheRed are nice and work well 
+# <http://merlinthered.deviantart.com/art/plain-weather-icons-157162192> CC-BY-NC-SA
 with open('/var/www/aktuell.html','w') as index:
-    index.write('<style type="text/css">body {font-weight:lighter; font-family:Arial; font-size:100%; } h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;}</style><h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>' + Weather_Text + '<img src="' + Condition_Code + '.png" align="right" alt="Wettericon"><br>Innen:<br><h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:<br><h2>' + str(Temperature_Out) + '&deg;C</h2><br>')
+    index.write('<style type="text/css">'
+        'body {font-weight:lighter; font-family:Arial; font-size:100%; } '
+        'h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;} </style>'
+        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>' 
+        + Weather_Text + 
+        '<img src="' + Condition_Code + '.png" align="right" alt="Wetter">'
+        '<br>Innen:<br>'
+        '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
+        '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>')
 
  # Write data to a .csv file for graph creation
 with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
     Data_Writer = csv.writer(weather_csv)
-    Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(Temperature_In),str(Temperature_Out),str('0'),str('15')])
+    Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),
+        str(Temperature_In),str(Temperature_Out),str('0'),str('15')])
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
