@@ -100,11 +100,8 @@ for Counter in range(2):
 # Start sensor stuff
 # The inside sensor
 # Open, read, close the sensor files
-Temp_File_In = open("/sys/bus/w1/devices/" + Temp_Sensor_Inside + "/w1_slave")
-
-Text_In = Temp_File_In.read()
-
-Temp_File_In.close()
+with open("/sys/bus/w1/devices/" + Temp_Sensor_Inside + "/w1_slave", 'r') as Temp_File_In:
+    Text_In = Temp_File_In.read()
 
 # Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
 Second_Line_In = Text_In.split("\n")[1]
@@ -114,11 +111,8 @@ Temperature_In = Temperature_In / 1000
 # print Temperature_In
 
 # The outside sensor
-Temp_File_Out = open("/sys/bus/w1/devices/" + Temp_Sensor_Outside + "/w1_slave")
-
-Text_Out = Temp_File_Out.read()
-
-Temp_File_Out.close()
+with open("/sys/bus/w1/devices/" + Temp_Sensor_Outside + "/w1_slave", 'r') as Temp_File_Out:
+    Text_Out = Temp_File_Out.read()
 
 # Jump to the right position in the sensor file, convert the string to a number, put the decimal point in
 Second_Line_Out = Text_Out.split("\n")[1]
@@ -143,16 +137,13 @@ lcd.write_string(Weather_Text)
 
 # Write the data to a webpage on the local server
 # Get some weather icons that are compliant with Yahoo condition codes. The ones by MerlinTheRed are nice and work well <http://merlinthered.deviantart.com/art/plain-weather-icons-157162192> CC-BY-NC-SA
-index = open('/var/www/aktuell.html','w')
-index.write('<style type="text/css">body {font-weight:lighter; font-family:Arial; font-size:100%; } h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;}</style><h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>' + Weather_Text + '<img src="' + Condition_Code + '.png" align="right" alt="Wettericon"><br>Innen:<br><h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:<br><h2>' + str(Temperature_Out) + '&deg;C</h2><br>')
-index.close()
-
+with open('/var/www/aktuell.html','w') as index:
+    index.write('<style type="text/css">body {font-weight:lighter; font-family:Arial; font-size:100%; } h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;}</style><h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>' + Weather_Text + '<img src="' + Condition_Code + '.png" align="right" alt="Wettericon"><br>Innen:<br><h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:<br><h2>' + str(Temperature_Out) + '&deg;C</h2><br>')
 
  # Write data to a .csv file for graph creation
-weather_csv = open('/home/pi/YAWP/weather.csv', 'a')
-Data_Writer = csv.writer(weather_csv)
-Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(Temperature_In),str(Temperature_Out),str('0'),str('15')])
-weather_csv.close()
+with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
+    Data_Writer = csv.writer(weather_csv)
+    Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),str(Temperature_In),str(Temperature_Out),str('0'),str('15')])
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
