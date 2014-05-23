@@ -17,6 +17,8 @@ import shutil
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
 from RPLCD import cursor, cleared
+# Import Adafruit BMP085 library
+from Adafruit_BMP085 import BMP085
 import backlight
 
 backlight.switch_light()
@@ -44,6 +46,8 @@ Temp_Sensor_Inside = '28-000005ad1070'
 Temp_Sensor_Outside = '28-000005ad0691'
 # Yahoo location code. Get the right one for your location from Yahoo's weather page.
 Location_ID = '700029'
+# Your altitude above sea level in meters.
+altitude = 140
 # ###################################################################################
 
 # Disable useless GPIO warnings
@@ -120,6 +124,12 @@ Temperature_Out = float(Temperature_Data_Out[2:])
 Temperature_Out = Temperature_Out / 1000
 # print Temperature_Out
 
+# Start air pressure stuff
+pressure_sensor = BMP085(0x77)
+pressure = pressure_sensor.readPressure()
+# Altitude correction for pressure at sea level. (Might not be needed, maybe remove.)
+psea = pressure / pow(1.0 - altitude/44330.0, 5.255)
+
 lcd = CharLCD()
 
 
@@ -147,13 +157,16 @@ with open('/var/www/aktuell.html','w') as index:
         '<img src="' + Condition_Code + '.png" align="right" alt="Wetter">'
         '<br>Innen:<br>'
         '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
-        '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>')
+        '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>'
+        '<br>Luftdruck:'
+        '<br>' + str(pressure / 100.0) + 'hPa')
 
  # Write data to a .csv file for graph creation
 with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
     Data_Writer = csv.writer(weather_csv)
     Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),
-        str(Temperature_In),str(Temperature_Out),str('0'),str('15')])
+        str(Temperature_In),str(Temperature_Out),str('0'),str('15'),
+        str(pressure / 100.0)])
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
@@ -162,10 +175,14 @@ os.waitpid(p.pid, 0)
 # Print graph for one week
 p = subprocess.Popen("gnuplot weekplotter.gpi", shell = True)
 os.waitpid(p.pid, 0)
+# Print the pressure graph
+p = subprocess.Popen("gnuplot pressure.gpi", shell = True)
+os.waitpid(p.pid, 0)
 
 # Copy it over to the webserver
 shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/weektemps.png', '/var/www/')
+shutil.copy2('/home/pi/YAWP/pressure.png', '/var/www/')
 
 
 
