@@ -15,8 +15,8 @@ set xtics 7200 font "Ariel, 10"
 
 set xlabel "Zeit"
 set ylabel "Luftdruck"
-set yrange [900:1300]
-set ytics 30 font "Ariel, 10"
+set yrange [980:1020]
+set ytics 5 font "Ariel, 10"
 
 set title "Luftdruck 24h"
 set key below
