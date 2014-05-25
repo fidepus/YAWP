@@ -13,6 +13,7 @@ import csv
 import os
 import subprocess
 import shutil
+import decimal
 # Import LCD stuff from RPLCD
 from RPLCD import CharLCD
 from RPLCD import Alignment, CursorMode, ShiftMode
@@ -127,8 +128,11 @@ Temperature_Out = Temperature_Out / 1000
 # Start air pressure stuff
 pressure_sensor = BMP085(0x77)
 pressure = pressure_sensor.readPressure()
-# Altitude correction for pressure at sea level. (Might not be needed, maybe remove.)
+# Altitude correction for pressure at sea level.
 psea = pressure / pow(1.0 - altitude/44330.0, 5.255)
+psea_dec = psea / 100.0
+pressure_relative = decimal.Decimal(psea_dec)
+rounded_pressure_relative = pressure_relative.quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_HALF_UP)
 
 lcd = CharLCD()
 
@@ -158,7 +162,9 @@ with open('/var/www/aktuell.html','w') as index:
         '<br>Innen:<br>'
         '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
         '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>'
-        '<br>Luftdruck:'
+        '<br>Relativer Luftdruck:'
+        '<br>' + str(rounded_pressure_relative) + 'hPa'
+        '<br>Absoluter Luftdruck:'
         '<br>' + str(pressure / 100.0) + 'hPa')
 
  # Write data to a .csv file for graph creation
@@ -166,7 +172,7 @@ with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
     Data_Writer = csv.writer(weather_csv)
     Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),
         str(Temperature_In),str(Temperature_Out),str('0'),str('15'),
-        str(pressure / 100.0)])
+        str(pressure / 100.0), str(pressure_relative)])
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
@@ -178,11 +184,15 @@ os.waitpid(p.pid, 0)
 # Print the pressure graph
 p = subprocess.Popen("gnuplot pressure.gpi", shell = True)
 os.waitpid(p.pid, 0)
+# Print the relative pressure graph
+p = subprocess.Popen("gnuplot relativepressure.gpi", shell = True)
+os.waitpid(p.pid, 0)
 
 # Copy it over to the webserver
 shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/weektemps.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/pressure.png', '/var/www/')
+shutil.copy2('/home/pi/YAWP/relativepressure.png', '/var/www/')
 
 
 
