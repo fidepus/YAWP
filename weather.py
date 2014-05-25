@@ -172,7 +172,7 @@ with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
     Data_Writer = csv.writer(weather_csv)
     Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),
         str(Temperature_In),str(Temperature_Out),str('0'),str('15'),
-        str(pressure / 100.0), str(pressure_relative)])
+        str(pressure / 100.0), str(rounded_pressure_relative)])
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
