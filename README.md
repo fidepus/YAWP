@@ -9,6 +9,8 @@ This particular model has a 4x20 LCD character display and several DS1820 sensor
 
 It uses [gnuplot](http://gnuplot.info) to generate a graph in .png that can be used on the website.
 
+See the outpout[here](wetter.fidepus.de).
+
 ToDo
 ----
 
