@@ -46,9 +46,9 @@ except NameError:
 Temp_Sensor_Inside = '28-000005ad1070'
 Temp_Sensor_Outside = '28-000005ad0691'
 # Yahoo location code. Get the right one for your location from Yahoo's weather page.
-Location_ID = '700029'
+Location_ID = '664474'
 # Your altitude above sea level in meters.
-altitude = 140
+altitude = 239
 # ###################################################################################
 
 # Disable useless GPIO warnings
@@ -105,7 +105,7 @@ for Counter in range(2):
 with open("/sys/bus/w1/devices/{0}/w1_slave".format(Temp_Sensor_Inside), 'r') as Temp_File_In:
     Text_In = Temp_File_In.read()
 
-# Jump to the right position in the sensor file, convert the string to a number, 
+# Jump to the right position in the sensor file, convert the string to a number,
 # put the decimal point in
 Second_Line_In = Text_In.split("\n")[1]
 Temperature_Data_In = Second_Line_In.split(" ")[9]
@@ -117,7 +117,7 @@ Temperature_In = Temperature_In / 1000
 with open("/sys/bus/w1/devices/{0}/w1_slave".format(Temp_Sensor_Outside), 'r') as Temp_File_Out:
     Text_Out = Temp_File_Out.read()
 
-# Jump to the right position in the sensor file, convert the string to a number, 
+# Jump to the right position in the sensor file, convert the string to a number,
 # put the decimal point in
 Second_Line_Out = Text_Out.split("\n")[1]
 Temperature_Data_Out = Second_Line_Out.split(" ")[9]
@@ -149,15 +149,15 @@ lcd.cursor_pos = (3, 0)
 lcd.write_string(Weather_Text)
 
 # Write the data to a webpage on the local server
-# Get some weather icons that are compliant with Yahoo condition codes. 
-# The ones by MerlinTheRed are nice and work well 
+# Get some weather icons that are compliant with Yahoo condition codes.
+# The ones by MerlinTheRed are nice and work well
 # <http://merlinthered.deviantart.com/art/plain-weather-icons-157162192> CC-BY-NC-SA
 with open('/var/www/aktuell.html','w') as index:
     index.write('<style type="text/css">'
         'body {font-weight:lighter; font-family:Arial; font-size:100%; } '
         'h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;} </style>'
-        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>' 
-        + Weather_Text + 
+        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>'
+        + Weather_Text +
         '<img src="' + Condition_Code + '.png" align="right" alt="Wetter">'
         '<br>Innen:<br>'
         '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
