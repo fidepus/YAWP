@@ -163,9 +163,7 @@ with open('/var/www/aktuell.html','w') as index:
         '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
         '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>'
         '<br>Relativer Luftdruck:'
-        '<br>' + str(rounded_pressure_relative) + 'hPa'
-        '<br>Absoluter Luftdruck:'
-        '<br>' + str(pressure / 100.0) + 'hPa')
+        '<br>' + str(rounded_pressure_relative) + 'hPa')
 
  # Write data to a .csv file for graph creation
 with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
