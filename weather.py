@@ -156,14 +156,14 @@ with open('/var/www/aktuell.html','w') as index:
     index.write('<style type="text/css">'
         'body {font-weight:lighter; font-family:Arial; font-size:100%; } '
         'h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;} </style>'
-        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6>'
+        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6><br>'
         + Weather_Text +
         '<img src="' + Condition_Code + '.png" align="right" alt="Wetter">'
-        '<br>Innen:<br>'
+        '<br><br>Innen:<br>'
         '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
         '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>'
         '<br>Relativer Luftdruck:'
-        '<br>' + str(rounded_pressure_relative) + 'hPa')
+        '<br><h2>' + str(rounded_pressure_relative) + 'hPa</h2>')
 
  # Write data to a .csv file for graph creation
 with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
