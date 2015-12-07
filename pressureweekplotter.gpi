@@ -1,0 +1,27 @@
+#!/usr/bin/gnuplot
+reset
+# Input file contains comma-separated values fields
+set datafile separator ","
+
+set terminal png size 640,360
+set output "relativepressureweek.png"
+
+set xdata time
+set timefmt "%Y-%m-%d %H:%M:%S"
+set format x "%d.%m."
+# set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
+set xrange [ time(0) - 612000 : time(0) + 7200 ]    # 604800 sec = 1 week
+set xtics 86400 font "Ariel, 10"
+
+set xlabel "Zeit"
+set ylabel "Luftdruck"
+set yrange [980:1050]
+set ytics 5 font "Ariel, 10"
+
+set title "Relativer Luftdruck Woche"
+set key below
+set grid
+
+set style line 1 lt rgb "blue" lw 3
+
+plot '< tail -n 10000 /home/pi/YAWP/weather.csv' using 1:7 ls 1 title "Luftdruck" with lines

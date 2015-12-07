@@ -185,12 +185,16 @@ os.waitpid(p.pid, 0)
 # Print the relative pressure graph
 p = subprocess.Popen("gnuplot relativepressure.gpi", shell = True)
 os.waitpid(p.pid, 0)
+# Print the relative pressure graph for one week
+p = subprocess.Popen("gnuplot pressureweekplotter.gpi", shell = True)
+os.waitpid(p.pid, 0)
 
 # Copy it over to the webserver
 shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/weektemps.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/pressure.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/relativepressure.png', '/var/www/')
+shutil.copy2('/home/pi/YAWP/relativepressureweek.png', '/var/www/')
 
 
 
