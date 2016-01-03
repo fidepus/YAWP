@@ -1,0 +1,27 @@
+#!/usr/bin/gnuplot
+reset
+# Input file contains comma-separated values fields
+set datafile separator ","
+
+set terminal png size 640,360
+set output "humidity.png"
+
+set xdata time
+set timefmt "%Y-%m-%d %H:%M:%S"
+set format x "%H:%M"
+# set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
+set xrange [ time(0) - 79300 : time(0) + 7200 ]    # 86400 sec = 1 day
+set xtics 7200 font "Ariel, 10"
+
+set xlabel "Zeit"
+set ylabel "Luftfeuchtigkeit in %"
+set yrange [0:100]
+set ytics 5 font "Ariel, 10"
+
+set title "Luftfeuchtigkeit 24h"
+set key below
+set grid
+
+set style line 1 lt rgb "blue" lw 3
+
+plot '< tail -n 1000 /home/pi/YAWP/weather.csv' using 1:8 ls 1 title "Luftfeuchtigkeit" with lines

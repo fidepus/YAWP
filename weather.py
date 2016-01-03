@@ -21,6 +21,7 @@ from RPLCD import cursor, cleared
 # Import Adafruit BMP085 library
 from Adafruit_BMP085 import BMP085
 import backlight
+import humidity
 
 backlight.switch_light()
 
@@ -134,6 +135,9 @@ psea_dec = psea / 100.0
 pressure_relative = decimal.Decimal(psea_dec)
 rounded_pressure_relative = pressure_relative.quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_HALF_UP)
 
+# Humidty stuff happens here
+humidityr = humidity.get_humidity()
+
 lcd = CharLCD()
 
 
@@ -156,21 +160,23 @@ with open('/var/www/aktuell.html','w') as index:
     index.write('<style type="text/css">'
         'body {font-weight:lighter; font-family:Arial; font-size:100%; } '
         'h2 {margin:0 0 0 0;} h6 {margin:0 0 0 0;} </style>'
-        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6><br>'
+        '<h6>Updated: ' + time.strftime("%d.%m.%Y %H:%M:%S") + '</h6><br><h2>'
         + Weather_Text +
-        '<img src="' + Condition_Code + '.png" align="right" alt="Wetter">'
+        '</h2><img src="' + Condition_Code + '.png" align="right" alt="Wetter">'
         '<br><br>Innen:<br>'
         '<h2>' + str(Temperature_In) + ' &deg;C</h2><br> Aussen:'
         '<br><h2>' + str(Temperature_Out) + '&deg;C</h2>'
         '<br>Relativer Luftdruck:'
-        '<br><h2>' + str(rounded_pressure_relative) + 'hPa</h2>')
+        '<br><h2>' + str(rounded_pressure_relative) + 'hPa</h2>'
+        '<br>Luftfeuchtigkeit:'
+        '<br><h2>' + str(humidityr) + '%</h2>')
 
  # Write data to a .csv file for graph creation
 with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
     Data_Writer = csv.writer(weather_csv)
     Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),
         str(Temperature_In),str(Temperature_Out),str('0'),str('15'),
-        str(pressure / 100.0), str(rounded_pressure_relative)])
+        str(pressure / 100.0), str(rounded_pressure_relative),str(humidityr)])
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
@@ -188,6 +194,8 @@ os.waitpid(p.pid, 0)
 # Print the relative pressure graph for one week
 p = subprocess.Popen("gnuplot pressureweekplotter.gpi", shell = True)
 os.waitpid(p.pid, 0)
+# Print the humidity graph for one day
+P = subprocess.Popen("gnuplot luftfeuchtigkeit.gpi", shell = True)
 
 # Copy it over to the webserver
 shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
@@ -195,6 +203,7 @@ shutil.copy2('/home/pi/YAWP/weektemps.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/pressure.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/relativepressure.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/relativepressureweek.png', '/var/www/')
+shutil.copy2('/home/pi/YAWP/humidity.png', '/var/www/')
 
 
 
