@@ -46,8 +46,8 @@ backlight.switch_light()
 # sudo modprobe w1-gpio
 # sudo modprobe w1-therm
 # or put them in /etc/modules
-Temp_Sensor_Inside = '28-000005ad1070'
-Temp_Sensor_Outside = '28-000005ad0691'
+Temp_Sensor_Inside = '28-0004441caaff'
+Temp_Sensor_Outside = '28-0004441f3aff'
 # Yahoo location code. Get the right one for your location from Yahoo's weather page.
 Location_ID = '664474'
 # Your altitude above sea level in meters.
