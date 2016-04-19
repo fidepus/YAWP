@@ -11,7 +11,7 @@ set timefmt "%Y-%m-%d %H:%M:%S"
 set format x "%d.%m."
 # set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
 set xrange [ time(0) - 612000 : time(0) + 7200 ]    # 604800 sec = 1 week
-set xtics 86500 font "Ariel, 10"
+set xtics 86400 font "Ariel, 10"
 
 set xlabel "Zeit"
 set ylabel "Luftfeuchtigkeit in %"

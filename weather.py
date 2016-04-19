@@ -213,6 +213,9 @@ p = subprocess.Popen("gnuplot pressureweekplotter.gpi", shell = True)
 os.waitpid(p.pid, 0)
 # Print the humidity graph for one day
 P = subprocess.Popen("gnuplot luftfeuchtigkeit.gpi", shell = True)
+os.waitpid(p.pid, 0)
+# Print the humidity graph for one week
+p = subprocess.Popen("gnuplot humidityweekplotter.gpi", shell = True)
 
 # Copy it over to the webserver
 shutil.copy2('/home/pi/YAWP/temps.png', '/var/www/')
@@ -221,7 +224,7 @@ shutil.copy2('/home/pi/YAWP/pressure.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/relativepressure.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/relativepressureweek.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/humidity.png', '/var/www/')
-
+shutil.copy2('/home/pi/YAWP/humidityweek.png', '/var/www/')
 
 
 
