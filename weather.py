@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# This project uses https://github.com/dbrgn/RPLCD.
-# sudo apt-get install python-matplotlib
 
 from __future__ import print_function, division, absolute_import, unicode_literals
 import sys
@@ -57,50 +55,55 @@ altitude = 239
 # Disable useless GPIO warnings
 GPIO.setwarnings(False)
 
-# Start Yahoo weather stuff
-# Weather array
-# Dimensions: 1 = today, 2 = tomorrow
-# Elements: 1 = day, 2 = date, 3 = low temp, 4 = high temp, 5 = weather text
-Weather_Array = [["", "", "", "", ""] , ["", "", "", "", ""]]
+# Temporary fix for Yahoo weather stuff
 
-# Fetch weather XML for Trier, Germany
-Trier = urllib.urlopen('http://weather.yahooapis.com/forecastrss?w={0}&u=c'.format(Location_ID)).read()
+Weather_Text = 'na'
+Condition_Code = '3200'
 
-# Parse the XML
-Trier = parseString(Trier)
+# # Start Yahoo weather stuff
+# # Weather array
+# # Dimensions: 1 = today, 2 = tomorrow
+# # Elements: 1 = day, 2 = date, 3 = low temp, 4 = high temp, 5 = weather text
+# Weather_Array = [["", "", "", "", ""] , ["", "", "", "", ""]]
 
-# Get town
-Place = Trier.getElementsByTagName('yweather:location')[0]
-City = Place.attributes["city"].value
-Country = Place.attributes["country"].value
+# # Fetch weather XML for Kaiserslautern, Germany
+# Kaiserslautern = urllib.urlopen('http://weather.yahooapis.com/forecastrss?w={0}&u=c'.format(Location_ID)).read()
 
-# Get date
-Date = Trier.getElementsByTagName('lastBuildDate')[0].firstChild.data
+# # Parse the XML
+# Kaiserslautern = parseString(Kaiserslautern)
 
-# Get coordinates
-Geo_Lat = Trier.getElementsByTagName('geo:lat')[0].firstChild.data
-Geo_Long = Trier.getElementsByTagName('geo:long')[0].firstChild.data
+# # Get town
+# Place = Kaiserslautern.getElementsByTagName('yweather:location')[0]
+# City = Place.attributes["city"].value
+# Country = Place.attributes["country"].value
 
-# Get today's weather
-Today = Trier.getElementsByTagName('yweather:condition')[0]
-Weather_Text = Today.attributes["text"].value
-Temperature = float(Today.attributes["temp"].value)
-Condition_Code = Today.attributes["code"].value
+# # Get date
+# Date = Kaiserslautern.getElementsByTagName('lastBuildDate')[0].firstChild.data
 
-# Put it all in a list
-for Counter in range(2):
+# # Get coordinates
+# Geo_Lat = Kaiserslautern.getElementsByTagName('geo:lat')[0].firstChild.data
+# Geo_Long = Kaiserslautern.getElementsByTagName('geo:long')[0].firstChild.data
 
-    # Weather data for two days
-    # Get data
-    Future = Trier.getElementsByTagName('yweather:forecast')[Counter]
+# # Get today's weather
+# Today = Kaiserslautern.getElementsByTagName('yweather:condition')[0]
+# Weather_Text = Today.attributes["text"].value
+# Temperature = float(Today.attributes["temp"].value)
+# Condition_Code = Today.attributes["code"].value
 
-    # Process data
-    Weather_Array[Counter][0] = Future.attributes["day"].value
-    Weather_Array[Counter][1] = Future.attributes["date"].value
-    Weather_Array[Counter][2] = float(Future.attributes["low"].value)
-    Weather_Array[Counter][3] = float(Future.attributes["high"].value)
-    Weather_Array[Counter][4] = Future.attributes["text"].value
-# End Yahoo weather stuff.
+# # Put it all in a list
+# for Counter in range(2):
+
+#     # Weather data for two days
+#     # Get data
+#     Future = Kaiserslautern.getElementsByTagName('yweather:forecast')[Counter]
+
+#     # Process data
+#     Weather_Array[Counter][0] = Future.attributes["day"].value
+#     Weather_Array[Counter][1] = Future.attributes["date"].value
+#     Weather_Array[Counter][2] = float(Future.attributes["low"].value)
+#     Weather_Array[Counter][3] = float(Future.attributes["high"].value)
+#     Weather_Array[Counter][4] = Future.attributes["text"].value
+# # End Yahoo weather stuff.
 
 # Start sensor stuff
 # The inside sensor
