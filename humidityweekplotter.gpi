@@ -8,7 +8,7 @@ set output "humidityweek.png"
 
 set xdata time
 set timefmt "%Y-%m-%d %H:%M:%S"
-set format x "%H:%M"
+set format x "%d.%m."
 # set xrange [ time(0) - 86400 : time(0) ]    # 86400 sec = 1 day 
 set xrange [ time(0) - 612000 : time(0) + 7200 ]    # 604800 sec = 1 week
 set xtics 86500 font "Ariel, 10"
