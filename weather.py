@@ -12,11 +12,7 @@ import os
 import subprocess
 import shutil
 import decimal
-# Import LCD stuff from RPLCD
-#from RPLCD import CharLCD
-#from RPLCD import Alignment, CursorMode, ShiftMode
-#from RPLCD import cursor, cleared
-#Import better I2C LCD stuff
+# Import I2C LCD Driver
 import lcddriver
 # Import Adafruit BMP085 library
 from Adafruit_BMP085 import BMP085
@@ -25,17 +21,6 @@ import humidity
 import mqtt
 
 #backlight.switch_light()
-
-# some LCD magic happens here
-#try:
-#    input = raw_input
-#except NameError:
-#    pass
-#
-#try:
-#    unichr = unichr
-#except NameError:
-#    unichr = chr
 
 # ###################################################################################
 # Configure stuff here:
@@ -58,8 +43,8 @@ GPIO.setwarnings(False)
 
 # Temporary fix for Yahoo weather stuff
 
-Weather_Text = 'na'
-Condition_Code = '3200'
+Weather_Text = 'KL'
+Condition_Code = 'na'
 
 # # Start Yahoo weather stuff
 # # Weather array
@@ -144,33 +129,19 @@ rounded_pressure_relative = pressure_relative.quantize(decimal.Decimal('.01'), r
 # Humidty stuff happens here
 humidityr = humidity.get_humidity()
 
-#lcd = CharLCD()
-
-
-# # Print the data onto the display.
-# lcd.clear()
-# lcd.write_string(time.strftime("%d.%m.%Y %H:%M"))
-# lcd.cursor_pos = (1, 0)
-# #lcd.write_string(str(City) + ' ')
-# lcd.write_string('Innen: {0} Grad'.format(Temperature_In))
-# lcd.cursor_pos = (2, 0)
-# lcd.write_string('Aussen: {0} Grad'.format(Temperature_Out))
-# lcd.cursor_pos = (3, 0)
-# lcd.write_string(Weather_Text)
-
 ##################################
-# second LCD stuff happening here#
+#   LCD stuff happening here     #
 ##################################
 
 lcd2 = lcddriver.lcd()
 
+backlight.switch_light()
 lcd2.lcd_clear()
 lcd2.lcd_display_string(time.strftime("%d.%m.%Y %H:%M"), 1)
 lcd2.lcd_display_string('Innen: {0} Grad'.format(Temperature_In), 2)
 lcd2.lcd_display_string('Aussen: {0} Grad'.format(Temperature_Out), 3)
 lcd2.lcd_display_string(str(Weather_Text) + ' ' + str(humidityr) + '%', 4)
 backlight.switch_light()
-#lcd2.backlight(0)
 
 # Write the data to a webpage on the local server
 # Get some weather icons that are compliant with Yahoo condition codes.
@@ -235,5 +206,5 @@ shutil.copy2('/home/pi/YAWP/relativepressureweek.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/humidity.png', '/var/www/')
 shutil.copy2('/home/pi/YAWP/humidityweek.png', '/var/www/')
 
-
+#backlight.switch_light()
 
