@@ -22,6 +22,7 @@ import lcddriver
 from Adafruit_BMP085 import BMP085
 import backlight
 import humidity
+import mqtt
 
 backlight.switch_light()
 
@@ -194,6 +195,12 @@ with open('/home/pi/YAWP/weather.csv', 'a') as weather_csv:
     Data_Writer.writerow([str(time.strftime('%Y-%m-%d %H:%M')),
         str(Temperature_In),str(Temperature_Out),str('0'),str('15'),
         str(pressure / 100.0), str(rounded_pressure_relative),str(humidityr)])
+
+
+#send data to mqtt
+mqtt.sendmqtt("/members/fidepus/home/livingroom/temperature", Temperature_In)
+mqtt.sendmqtt("/members/fidepus/home/outdoor/livingroom", Temperature_Out)
+mqtt.sendmqtt("/members/fidepus/home/livingroom/humidity", humidityr)
 
 # From here, a gnuplot file will take over.
 # Print graph for one day
