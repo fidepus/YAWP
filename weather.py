@@ -133,7 +133,7 @@ humidityr = humidity.get_humidity()
 #   LCD stuff happening here     #
 ##################################
 
-#lcd2 = lcddriver.lcd()
+lcd2 = lcddriver.lcd()
 
 backlight.switch_light()
 #lcd2.lcd_clear()
