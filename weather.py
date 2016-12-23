@@ -136,12 +136,12 @@ humidityr = humidity.get_humidity()
 lcd2 = lcddriver.lcd()
 
 backlight.switch_light()
-#lcd2.lcd_clear()
-#lcd2.lcd_display_string(time.strftime("%d.%m.%Y %H:%M"), 1)
-#lcd2.lcd_display_string('Innen: {0} Grad'.format(Temperature_In), 2)
-#lcd2.lcd_display_string('Aussen: {0} Grad'.format(Temperature_Out), 3)
-#lcd2.lcd_display_string(str(Weather_Text) + ' ' + str(humidityr) + '%', 4)
-#backlight.switch_light()
+lcd2.lcd_clear()
+lcd2.lcd_display_string(time.strftime("%d.%m.%Y %H:%M"), 1)
+lcd2.lcd_display_string('Innen: {0} Grad'.format(Temperature_In), 2)
+lcd2.lcd_display_string('Aussen: {0} Grad'.format(Temperature_Out), 3)
+lcd2.lcd_display_string(str(Weather_Text) + ' ' + str(humidityr) + '%', 4)
+backlight.switch_light()
 
 # Write the data to a webpage on the local server
 # Get some weather icons that are compliant with Yahoo condition codes.

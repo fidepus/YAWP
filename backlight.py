@@ -15,11 +15,6 @@ def switch_light():
 	# see if it is time to switch on the light
 	if now_time >= time(6,00) and now_time <= time(23,00):
 	    lcd.backlight(1)
-	    lcd2.lcd_clear()
-		lcd2.lcd_display_string(time.strftime("%d.%m.%Y %H:%M"), 1)
-		lcd2.lcd_display_string('Innen: {0} Grad'.format(Temperature_In), 2)
-		lcd2.lcd_display_string('Aussen: {0} Grad'.format(Temperature_Out), 3)
-		lcd2.lcd_display_string(str(Weather_Text) + ' ' + str(humidityr) + '%', 4)
         # if not, switch it off
 	else:
 		lcd.backlight(0)
