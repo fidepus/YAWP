@@ -43,7 +43,7 @@ GPIO.setwarnings(False)
 
 # Temporary fix for Yahoo weather stuff
 
-Weather_Text = 'KL'
+Weather_Text = 'Feuchte:'
 Condition_Code = 'na'
 
 # # Start Yahoo weather stuff
